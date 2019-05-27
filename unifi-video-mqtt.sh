@@ -7,7 +7,7 @@ fi
 
 # MQTT Vars
 if [ -z $MQTT_SERVER ]; then
-  MQTT_SERVER="192.168.x.x"
+  MQTT_SERVER="192.168.1.1"
 fi
 if [ -z $MQTT_PORT ]; then
   MQTT_PORT="1883"
