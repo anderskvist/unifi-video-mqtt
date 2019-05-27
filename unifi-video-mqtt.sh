@@ -41,22 +41,20 @@ while inotifywait -e modify $UNIFI_MOTION_LOG; do
 
   if [[ $VER_TEST == "Camera" ]]; then
     # New Format
-    LAST_CAM=`echo $LAST_MESSAGE | awk -F '[][]' '{print $4}'`
+    CAM_ID=`echo $LAST_MESSAGE | awk -F '[][]' '{print $4}'`
   else
     # Old Format
-    LAST_CAM=`echo $LAST_MESSAGE | awk -F '[][]' '{print $2}'`
+    CAM_ID=`echo $LAST_MESSAGE | awk -F '[][]' '{print $2}'`
   fi
+  CAM_NAME=`echo $LAST_MESSAGE | awk -F '[()]' '{print $2}'`
 
   LAST_EVENT=`echo $LAST_MESSAGE | cut -d ':' -f 5 | cut -d ' ' -f 1`
 
-  if echo $LAST_CAM | grep -n1 $CAM1_ID; then
-    # Camera 1 triggered
-	  if [[ $LAST_EVENT == "start" ]]; then
-	    echo "Motion started on $CAM1_NAME"
-	    mosquitto_pub -h $MQTT_SERVER -p $MQTT_PORT $MQTT_USER_PASS -r $MQTT_ID_OPT -t $MQTT_TOPIC_BASE/$CAM1_NAME -m "ON" &
-	  else
-	    echo "Motion stopped on $CAM1_NAME"
-	    mosquitto_pub -h $MQTT_SERVER -p $MQTT_PORT $MQTT_USER_PASS -r $MQTT_ID_OPT -t $MQTT_TOPIC_BASE/$CAM1_NAME -m "OFF" &
-	  fi
+  if [[ $LAST_EVENT == "start" ]]; then
+    echo "Motion started on $CAM_NAME"
+    mosquitto_pub -h $MQTT_SERVER -p $MQTT_PORT $MQTT_USER_PASS -r $MQTT_ID_OPT -t $MQTT_TOPIC_BASE/$CAM_ID -m "ON" &
+  else
+    echo "Motion stopped on $CAM_NAME"
+    mosquitto_pub -h $MQTT_SERVER -p $MQTT_PORT $MQTT_USER_PASS -r $MQTT_ID_OPT -t $MQTT_TOPIC_BASE/$CAM_ID -m "OFF" &
   fi
 done
