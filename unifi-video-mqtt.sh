@@ -1,21 +1,20 @@
 #!/bin/bash
 
 # Unifi Video Vars
-UNIFI_MOTION_LOG=/var/log/unifi-video/motion.log
+if [ -z $UNIFI_MOTION_LOG ]; then
+  UNIFI_MOTION_LOG=/var/log/unifi-video/motion.log
+fi
 
 # MQTT Vars
-MQTT_SERVER="192.168.x.x"
-MQTT_PORT="1883"
-MQTT_TOPIC_BASE="camera/motion"
-
-# MQTT User/Pass Vars, only use if needed
-#MQTT_USER="username"
-#MQTT_PASS="password"
-#MQTT_ID="yourid"  ## To make it work with hassio
-
-# Camera Defs
-CAM1_NAME="camera_name"
-CAM1_ID="F0xxxxxxxxxx"
+if [ -z $MQTT_SERVER ]; then
+  MQTT_SERVER="192.168.x.x"
+fi
+if [ -z $MQTT_PORT ]; then
+  MQTT_PORT="1883"
+fi
+if [ -z $MQTT_TOPIC_BASE ]; then
+  MQTT_TOPIC_BASE="camera/motion"
+fi
 
 # --------------------------------------------------------------------------------
 # Script starts here
